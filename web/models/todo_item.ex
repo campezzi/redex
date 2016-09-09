@@ -1,8 +1,17 @@
 defmodule Redex.TodoItem do
   use Redex.Web, :model
 
-  @derive {Poison.Encoder, except: [:__meta__, :inserted_at, :updated_at, :todo_list]}
-  
+  @derive {
+    Poison.Encoder,
+    except: [
+      :__meta__,
+      :inserted_at,
+      :updated_at,
+      :todo_list,
+      :todo_list_id
+    ]
+  }
+
   schema "todo_items" do
     field :name, :string
     field :done, :boolean, default: false
