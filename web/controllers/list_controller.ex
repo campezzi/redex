@@ -1,39 +1,33 @@
 defmodule Redex.ListController do
   use Redex.Web, :controller
-  alias Redex.{TodoList, TodoItem, TodoListCreated, TodoItemAdded, TodoItemCompleted}
 
-  def demo(conn, _params) do
+  def index(conn, _params) do
+    query = from l in TodoList, preload: :items
+    json(conn, Repo.all(query))
+  end
 
-    # create the todo list
-    todo_list =
-      Ecto.UUID.generate
-      |> TodoList.new
-      |> TodoList.apply(%TodoListCreated{name: "To Read"})
+  def create(conn, params) do
+    data = %TodoListCreated{name: params["name"]}
+    id = create_event("TodoList", data)
 
-    Repo.insert!(todo_list)
+    json(conn, %{result: "queued", todo_list_id: id})
+  end
 
-    # create todo items
-    elixir_in_action =
-      Ecto.UUID.generate
-      |> TodoItem.new
-      |> TodoItem.apply(%TodoItemAdded{todo_list_id: todo_list.id, name: "Elixir in Action"})
+  def add_item(conn, params) do
+    data = %TodoItemAdded{todo_list_id: params["todo_list_id"], name: params["name"]}
+    id = create_event("TodoItem", data)
 
-    grokking_algorithms =
-      Ecto.UUID.generate
-      |> TodoItem.new
-      |> TodoItem.apply(%TodoItemAdded{todo_list_id: todo_list.id, name: "Grokking Algorithms"})
-      |> TodoItem.apply(%TodoItemCompleted{})
+    json(conn, %{result: "queued", todo_item_id: id})
+  end
 
-    learn_you_a_haskell =
-      Ecto.UUID.generate
-      |> TodoItem.new
-      |> TodoItem.apply(%TodoItemAdded{todo_list_id: todo_list.id, name: "Learn You a Haskell"})
+  def complete_item(conn, params) do
+    id = create_event("TodoItem", %TodoItemCompleted{}, params["todo_item_id"])
 
-    [elixir_in_action, grokking_algorithms, learn_you_a_haskell]
-    |> Enum.map(fn item -> Repo.insert!(item) end)
+    json(conn, %{result: "queued", todo_item_id: id})
+  end
 
-    # render output
-    todo_list = Repo.preload(todo_list, :items)
-    json(conn, todo_list)
+  defp create_event(aggregate_type, data, aggregate_id \\ Ecto.UUID.generate) do
+    Repo.insert!(Event.new(aggregate_type, aggregate_id, data))
+    aggregate_id
   end
 end

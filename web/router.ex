@@ -1,26 +1,21 @@
 defmodule Redex.Router do
   use Redex.Web, :router
 
-  pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/", Redex do
-    pipe_through :browser # Use the default browser stack
+    pipe_through :api
 
-    get "/", ListController, :demo
+    get "/demo", PageController, :demo
+
+    get "/events", EventController, :index
+    get "/events/snapshot", EventController, :snapshot
+
+    get "/", ListController, :index
+    post "/", ListController, :create
+    post "/:todo_list_id/items", ListController, :add_item
+    post "/:todo_list_id/items/:todo_item_id", ListController, :complete_item
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", Redex do
-  #   pipe_through :api
-  # end
 end

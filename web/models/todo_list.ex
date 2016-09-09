@@ -3,6 +3,7 @@ defmodule Redex.TodoList do
 
   @derive {Poison.Encoder, except: [:__meta__, :inserted_at, :updated_at]}
 
+  @primary_key {:id, :binary_id, autogenerate: true}
   schema "todo_lists" do
     field :name, :string
     has_many :items, TodoItem
@@ -12,6 +13,6 @@ defmodule Redex.TodoList do
   def new(id), do: %TodoList{id: id}
 
   def apply(todo_list, %TodoListCreated{} = event) do
-    %TodoList{ todo_list | name: event.name }
+    %{todo_list | name: event.name}
   end
 end

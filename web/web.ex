@@ -24,10 +24,7 @@ defmodule Redex.Web do
       import Ecto.Changeset
       import Ecto.Query
 
-      alias Redex.{TodoList, TodoItem, TodoListCreated, TodoItemAdded, TodoItemCompleted}
-
-      @primary_key {:id, :binary_id, autogenerate: true}
-      @foreign_key_type :binary_id
+      alias Redex.{Event, TodoList, TodoItem, TodoListCreated, TodoItemAdded, TodoItemCompleted}
     end
   end
 
@@ -41,6 +38,8 @@ defmodule Redex.Web do
 
       import Redex.Router.Helpers
       import Redex.Gettext
+
+      alias Redex.{Event, TodoList, TodoItem, TodoListCreated, TodoItemAdded, TodoItemCompleted}
     end
   end
 
