@@ -13,6 +13,7 @@ defmodule Redex.TodoItem do
   }
 
   @primary_key {:id, :binary_id, autogenerate: true}
+  @foreign_key_type :binary_id
   schema "todo_items" do
     field :name, :string
     field :done, :boolean, default: false
