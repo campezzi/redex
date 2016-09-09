@@ -1,3 +1,3 @@
 defmodule Redex.TodoItemAdded do
-  defstruct [:id, :name]
+  defstruct [:todo_list_id, :name]
 end

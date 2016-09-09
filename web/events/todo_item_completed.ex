@@ -1,3 +1,3 @@
 defmodule Redex.TodoItemCompleted do
-  defstruct [:id]
+  defstruct []
 end

@@ -24,7 +24,8 @@ defmodule Redex.Web do
       import Ecto.Changeset
       import Ecto.Query
 
-      @derive {Poison.Encoder, except: [:__meta__, :inserted_at, :updated_at]}
+      alias Redex.{TodoList, TodoItem, TodoListCreated, TodoItemAdded, TodoItemCompleted}
+
       @primary_key {:id, :binary_id, autogenerate: true}
       @foreign_key_type :binary_id
     end
