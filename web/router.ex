@@ -12,6 +12,7 @@ defmodule Redex.Router do
 
     get "/events", EventController, :index
     get "/events/snapshot", EventController, :snapshot
+    get "/events/reset_snapshot", EventController, :reset_snapshot
 
     get "/", ListController, :index
     post "/", ListController, :create
