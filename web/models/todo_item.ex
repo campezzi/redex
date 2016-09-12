@@ -34,7 +34,7 @@ defmodule Redex.TodoItem do
   end
 
   def apply(todo_item, %TodoItemCompleted{}) do
-    %{todo_item | done: true}
+    complete(todo_item)
   end
 
 end
